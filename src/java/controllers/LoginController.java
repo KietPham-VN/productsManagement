@@ -1,6 +1,5 @@
 package controllers;
 
-import constants.Pages;
 import dao.AccountDAO;
 import entities.Account;
 import java.io.IOException;
