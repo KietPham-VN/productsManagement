@@ -1,1 +1,1 @@
-# productManagement
+# productsManagement
