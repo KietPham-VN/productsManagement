@@ -79,8 +79,9 @@
                         <input type="hidden" name="action" value="update">
                         <button type="submit">Update</button>
                     </form>
-                    <form action="Product" method="POST">
+                    <form action="MainController" method="POST">
                         <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="productId" value="<%= p.getId() %>">
                         <button type="submit">Detele</button>
                     </form>
                 </td>

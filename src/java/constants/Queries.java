@@ -39,4 +39,8 @@ public class Queries
     public static final String CREATE_PRODUCT
             = "INSERT INTO Product(name, price, product_year, image, category_id) "
             + "VALUES(?, ?, ?, ?, ?)";
+
+    public static final String REMOVE_PRODUCT
+            = "DELETE Product "
+            + "WHERE id = ?";
 }
