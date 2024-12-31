@@ -75,14 +75,15 @@
                 <td><img src="<%= p.getImage()%>" alt="product image" width="100" height="100"></td>
                 <td><%= p.getCategory().getName()%></td>
                 <td>
-                    <form action="Product" method="POST">
+                    <form action="MainController" method="GET">
                         <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="productId" value="<%= p.getId() %>">
                         <button type="submit">Update</button>
                     </form>
                     <form action="MainController" method="POST">
                         <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="productId" value="<%= p.getId() %>">
-                        <button type="submit">Detele</button>
+                        <button type="submit">Remove</button>
                     </form>
                 </td>
             </tr>

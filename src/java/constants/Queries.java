@@ -31,10 +31,10 @@ public class Queries
             + "WHERE 1 = 1 ";
 
     public static final String GET_PRODUCT_BY_ID
-            = "SELECT id, name, price, product_year, image, p.category_id, c.name as category_name "
+            = "SELECT p.id, p.name, price, product_year, image, p.category_id, c.name as category_name "
             + "FROM Product p join Category c "
             + "ON p.category_id = c.id "
-            + "WHERE id = ? ";
+            + "WHERE p.id = ? ";
 
     public static final String CREATE_PRODUCT
             = "INSERT INTO Product(name, price, product_year, image, category_id) "
@@ -43,4 +43,14 @@ public class Queries
     public static final String REMOVE_PRODUCT
             = "DELETE Product "
             + "WHERE id = ?";
+    public static final String UPDATE_PRODUCT
+            ="UPDATE Product "
+            + "SET "
+            + "name = ?, "
+            + "price = ?, "
+            + "product_year = ?, "
+            + "image = ?, "
+            + "category_id = ? "
+            + "WHERE id = ?";
+    
 }

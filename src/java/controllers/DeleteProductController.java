@@ -31,13 +31,11 @@ public class DeleteProductController extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        // Lấy productId từ request
         String productIdStr = request.getParameter("productId");
         try
         {
             int productId = Integer.parseInt(productIdStr);
 
-            // Gọi DAO để xóa sản phẩm
             ProductDAO productDAO = new ProductDAO();
             boolean isDeleted = productDAO.removeProduct(productId);
 

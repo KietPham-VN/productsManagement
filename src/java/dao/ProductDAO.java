@@ -103,6 +103,7 @@ public class ProductDAO extends DBUtils
         } catch (SQLException ex)
         {
             System.out.println("SQL Exception in getting product by id. Details: ");
+            ex.printStackTrace();
         }
         return product;
     }
@@ -149,6 +150,33 @@ public class ProductDAO extends DBUtils
         } catch (SQLException ex)
         {
             System.out.println("SQL Exception in inserting new product. Details: ");
+        }
+        return false;
+    }
+    
+    public boolean updateProduct(Product product)
+    {
+        try
+        {
+            PreparedStatement ps = getConnection().prepareStatement(Queries.UPDATE_PRODUCT);
+            ps.setString(1, product.getName());
+            ps.setFloat(2, product.getPrice());
+            ps.setInt(3, product.getProductYear());
+            ps.setString(4, product.getImage());
+            ps.setInt(5, product.getCategory().getId());
+            ps.setInt(6, product.getId());
+            int rows = ps.executeUpdate();
+            if (rows > 0)
+            {
+                return true;
+            }
+        } catch (ClassNotFoundException ex)
+        {
+            System.out.println("DBUtils not found!");
+        } catch (SQLException ex)
+        {
+            System.out.println("SQL Exception in updating a product. Details: ");
+            ex.printStackTrace();
         }
         return false;
     }

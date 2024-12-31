@@ -58,7 +58,6 @@ public class CreateProductController extends HttpServlet
                 throw new InvalidDataException("Category not found!");
             }
 
-            // call DAO
             Product product = new Product(name, Float.parseFloat(price), Integer.parseInt(productYear), image, category);
             boolean isOk = productDAO.createProduct(product);
             if (!isOk)
