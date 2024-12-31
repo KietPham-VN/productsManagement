@@ -6,6 +6,9 @@
             <file>file:/D:/LearningMaterial/FPTU/productManagement/src/java/controllers/LoginController.java</file>
             <file>file:/D:/LearningMaterial/FPTU/productManagement/src/java/controllers/ListProductsController.java</file>
             <file>file:/D:/LearningMaterial/FPTU/productManagement/web/views/account/login.jsp</file>
+            <file>file:/D:/LearningMaterial/FPTU/productManagement/src/java/dao/CategoryDAO.java</file>
+            <file>file:/D:/LearningMaterial/FPTU/productManagement/src/java/dao/ProductDAO.java</file>
+            <file>file:/D:/LearningMaterial/FPTU/productManagement/src/java/controllers/CreateProductController.java</file>
             <file>file:/D:/LearningMaterial/FPTU/productManagement/src/java/controllers/MainController.java</file>
         </group>
     </open-files>

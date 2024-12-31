@@ -8,11 +8,10 @@
         <title>Create Product</title>
     </head>
     <body>
-        <h1>Add New Product</h1>
+        <h1>Add A New Product</h1>
         <%
             String error = (String) request.getAttribute("msg");
         %>
-        <h1>Login Page</h1> 
         <%
             if (error != null) {
         %>
@@ -20,7 +19,7 @@
         <%
             }
         %>
-        <form action="Product" method="POST">
+        <form action="MainController" method="POST">
             <label for="name">Product Name:</label>
             <input type="text" id="name" name="name" required><br><br>
 
@@ -46,7 +45,7 @@
                     }
                 %>
             </select><br><br>
-            <input type="hidden" name="action" value="add"> <!-- parameter action to handle add new product-->
+            <input type="hidden" name="action" value="create"> <!-- parameter action to handle add new product-->
             <button type="submit">Add Product</button>
         </form>
     </body>

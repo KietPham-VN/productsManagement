@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import utils.DBUtils;
-import static utils.DBUtils.getConnection;
 import utils.enums.AccountRole;
 
 public class AccountDAO extends DBUtils
@@ -20,16 +19,14 @@ public class AccountDAO extends DBUtils
             PreparedStatement ps = getConnection().prepareStatement(Queries.GET_ACCOUNT_BY_ID);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs != null)
-            {
-                if (rs.next())
+            if (rs != null && rs.next())
                 {
                     account = new Account();
                     account.setId(rs.getInt("id"));
                     account.setUsername(rs.getString("username"));
                     account.setRole((rs.getInt("role") == 1 ? AccountRole.STAFF : AccountRole.CUSTOMER));
                 }
-            }
+            
         } catch (ClassNotFoundException ex)
         {
             System.out.println("DBUtils not found.");
@@ -50,16 +47,14 @@ public class AccountDAO extends DBUtils
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            if (rs != null)
-            {
-                if (rs.next())
+            if (rs != null && rs.next())
                 {
                     account = new Account();
                     account.setId(rs.getInt("id"));
                     account.setUsername(username);
                     account.setRole((rs.getInt("role") == 1 ? AccountRole.STAFF : AccountRole.CUSTOMER));
                 }
-            }
+            
         } catch (ClassNotFoundException ex)
         {
             System.out.println("DBUtils not found.");

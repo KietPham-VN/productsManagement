@@ -56,7 +56,7 @@ public class ListProductsController extends HttpServlet
             {
                 SearchProductDTO searchDTO = new SearchProductDTO(categoryIdRaw, productName);
                 searchDTO.validate();
-                categoryId = Integer.parseInt(categoryIdRaw);
+                categoryId = Integer.valueOf(categoryIdRaw);
             }
 
             // get search data

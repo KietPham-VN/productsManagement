@@ -93,8 +93,8 @@
             }
         %>
         <br>
-        <form action="Product" method="GET">
-            <input type="hidden" name="action" value="prepare-add">
+        <form action="MainController" method="GET">
+            <input type="hidden" name="action" value="create">
             <button type="submit">Add</button>
         </form>
 
