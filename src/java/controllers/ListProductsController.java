@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 public class ListProductsController extends HttpServlet
 {
 
+    private final ProductDAO productDAO = new ProductDAO();
+    private final CategoryDAO categoryDAO = new CategoryDAO();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         response.setContentType("text/html;charset=UTF-8");
@@ -31,56 +34,63 @@ public class ListProductsController extends HttpServlet
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-        try
-        {
-            // get category list for drop down
-            CategoryDAO categoryDAO = new CategoryDAO();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Lấy danh sách danh mục
             List<Category> categories = categoryDAO.getCategories();
             request.setAttribute("categories", categories);
 
-            // get search criterias
-            String categoryIdRaw = request.getParameter("category");
-            String productName = request.getParameter("productName");
+            // Lấy toàn bộ sản phẩm
+            List<Product> products = productDAO.getProducts(null, null);
+            request.setAttribute("products", products);
+        } catch (Exception e) {
+            request.setAttribute("msg", "Error while loading products: " + e.getMessage());
+            Logger.getLogger(ListProductsController.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            // Chuyển tiếp đến trang hiển thị danh sách sản phẩm
+            request.getRequestDispatcher(Pages.PRODUCTS).forward(request, response);
+        }
+    }
 
-            // validate search fields only when search criterias a string
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Lấy tiêu chí tìm kiếm từ form
+            String productName = request.getParameter("productName");
+            String categoryIdRaw = request.getParameter("category");
+
+            // Chuyển đổi dữ liệu
             Integer categoryId = null;
-            if (categoryIdRaw != null && !categoryIdRaw.isEmpty())
-            {
-                SearchProductDTO searchDTO = new SearchProductDTO(categoryIdRaw, productName);
-                searchDTO.validate();
+            if (categoryIdRaw != null && !categoryIdRaw.isEmpty()) {
                 categoryId = Integer.valueOf(categoryIdRaw);
             }
 
-            // get search data
-            ProductDAO productDAO = new ProductDAO();
-            List<Product> list = productDAO.getProducts(productName, categoryId);
-            if (list != null && !list.isEmpty())
-            {
-                request.setAttribute("products", list);
-            } else
-            {
-                throw new InvalidDataException("No Products Found!");
+            // Thực hiện tìm kiếm sản phẩm
+            List<Product> products = productDAO.getProducts(productName, categoryId);
+
+            // Kiểm tra kết quả
+            if (products == null || products.isEmpty()) {
+                request.setAttribute("msg", "No products found matching your criteria.");
+            } else {
+                request.setAttribute("products", products);
             }
 
-            // hold search criteria on search bar for next request
+            // Lấy danh sách danh mục để hiển thị trong dropdown
+            List<Category> categories = categoryDAO.getCategories();
+            request.setAttribute("categories", categories);
+
+            // Giữ lại tiêu chí tìm kiếm
             request.setAttribute("productName", productName);
             request.setAttribute("category", categoryIdRaw);
-        } catch (InvalidDataException ex)
-        {
-            request.setAttribute("msg", ex.getMessage());
-        } catch (exceptions.ValidationException ex)
-        {
-            Logger.getLogger(ListProductsController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally
-        {
+
+        } catch (NumberFormatException e) {
+            request.setAttribute("msg", "Invalid category ID. Please try again.");
+            Logger.getLogger(ListProductsController.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {
+            request.setAttribute("msg", "An error occurred while searching for products.");
+            Logger.getLogger(ListProductsController.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            // Chuyển tiếp đến trang hiển thị sản phẩm
             request.getRequestDispatcher(Pages.PRODUCTS).forward(request, response);
         }
     }
