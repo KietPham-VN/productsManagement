@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "MainController", urlPatterns =
 {
@@ -18,8 +19,16 @@ public class MainController extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         response.setContentType("text/html;charset=UTF-8");
+
         String action = request.getParameter("action");
         String url = Pages.LOGIN;
+        HttpSession session = request.getSession(false);
+        if ((session == null || session.getAttribute("account") == null) && !"login".equals(action))
+        {
+
+            request.getRequestDispatcher(Pages.LOGIN).forward(request, response);
+            return;
+        }
         switch (action)
         {
             case "login":

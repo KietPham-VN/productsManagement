@@ -1,4 +1,4 @@
-package controllers;
+package controllers.product;
 
 import constants.Pages;
 import dao.CategoryDAO;

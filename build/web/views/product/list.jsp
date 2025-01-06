@@ -1,6 +1,7 @@
 <%@page import="entities.Product"%>
 <%@page import="entities.Category"%>
-<%@page import="java.util.List"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -34,106 +35,80 @@
         <h1>Product Page</h1>
         <br>
 
-        <!-- SEARCH FORM -->
         <form action="ListProductsController" method="POST">
             <div class="form-group">
                 <label for="productName">Product Name:</label>
                 <input type="text" id="productName" name="productName" 
-                       value="<%= request.getAttribute("productName") != null ? request.getAttribute("productName") : ""%>">
+                       value="${param.productName != null ? param.productName : ''}">
             </div>
 
             <div class="form-group">
                 <label for="category">Category:</label>
                 <select name="category" id="category">
                     <option value="">All Categories</option>
-                    <%
-                        List<Category> categories = (List<Category>) request.getAttribute("categories");
-                        String selectedCategory = (String) request.getAttribute("category");
-                        if (categories != null)
-                        {
-                            for (Category category : categories)
-                            {
-                    %>
-                    <option value="<%= category.getId()%>" 
-                            <%= selectedCategory != null && !selectedCategory.isEmpty() && category.getId() == Integer.parseInt(selectedCategory) ? "selected" : ""%>>
-                        <%= category.getName()%>
-                    </option>
-                    <%
-                            }
-                        }
-                    %>
+                    <c:forEach var="category" items="${categories}">
+                        <option value="${category.id}" 
+                                <c:if test="${category.id == param.category}">selected</c:if>>
+                            ${category.name}
+                        </option>
+                    </c:forEach>
                 </select>
             </div>
 
             <button type="submit">Search</button>
         </form>
-                <!-- ADD NEW PRODUCT -->
+
         <form action="MainController" method="GET">
             <input type="hidden" name="action" value="create">
             <button type="submit">Add New Product</button>
         </form>
         <br>
 
-        <!-- PRODUCT LIST -->
-        <%
-            List<Product> products = (List<Product>) request.getAttribute("products");
-            String msg = (String) request.getAttribute("msg");
-            if (products == null || products.isEmpty())
-            {
-        %>
-        <h3 class="center" style="color: red;"><%= msg != null ? msg : "No products found."%></h3>
-        <%
-        } else
-        {
-        %>
-        <table>
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Year</th>
-                    <th>Image</th>
-                    <th>Category</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                    int count = 1;
-                    for (Product p : products)
-                    {
-                %>
-                <tr>
-                    <td><%= count++%></td>
-                    <td><%= p.getName()%></td>
-                    <td>$<%= p.getPrice()%></td>
-                    <td><%= p.getProductYear()%></td>
-                    <td><img src="<%= p.getImage()%>" alt="Product Image" width="100" height="100"></td>
-                    <td><%= p.getCategory().getName()%></td>
-                    <td>
-                        <form action="MainController" method="GET" style="display:inline;">
-                            <input type="hidden" name="action" value="update">
-                            <input type="hidden" name="productId" value="<%= p.getId()%>">
-                            <button type="submit">Update</button>
-                        </form>
-                        <form action="MainController" method="POST" style="display:inline;">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="productId" value="<%= p.getId()%>">
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this product?');">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-                <%
-                    }
-                %>
-            </tbody>
-        </table>
-        <%
-            }
-        %>
-        <br>
+        <c:if test="${empty products}">
+            <h3 class="center" style="color: red;">
+                ${msg != null ? msg : 'No products found.'}
+            </h3>
+        </c:if>
 
-        
+        <c:if test="${not empty products}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Year</th>
+                        <th>Image</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="p" items="${products}" varStatus="status">
+                        <tr>
+                            <td>${status.count}</td>
+                            <td>${p.name}</td>
+                            <td>$${p.price}</td>
+                            <td>${p.productYear}</td>
+                            <td><img src="${p.image}" alt="Product Image" width="100" height="100"></td>
+                            <td>${p.category.name}</td>
+                            <td>
+                                <form action="MainController" method="GET" style="display:inline;">
+                                    <input type="hidden" name="action" value="update">
+                                    <input type="hidden" name="productId" value="${p.id}">
+                                    <button type="submit">Update</button>
+                                </form>
+                                <form action="MainController" method="POST" style="display:inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="productId" value="${p.id}">
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this product?');">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </c:if>
+        <br>
     </body>
 </html>

@@ -1,10 +1,8 @@
-package controllers;
+package controllers.product;
 
-import com.sun.media.sound.InvalidDataException;
 import constants.Pages;
 import dao.CategoryDAO;
 import dao.ProductDAO;
-import dto.SearchProductDTO;
 import entities.Category;
 import entities.Product;
 import java.io.IOException;
