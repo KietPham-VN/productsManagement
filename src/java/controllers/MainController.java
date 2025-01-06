@@ -20,7 +20,6 @@ public class MainController extends HttpServlet
         response.setContentType("text/html;charset=UTF-8");
         String action = request.getParameter("action");
         String url = Pages.LOGIN;
-        System.out.println(action);
         switch (action)
         {
             case "login":
@@ -46,6 +45,11 @@ public class MainController extends HttpServlet
             case "delete":
             {
                 url = "DeleteProductController";
+                break;
+            }
+            case "logout":
+            {
+                url = "LogoutController";
                 break;
             }
             default:

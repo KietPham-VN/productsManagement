@@ -1,5 +1,6 @@
 package controllers;
 
+import constants.Pages;
 import dao.AccountDAO;
 import entities.Account;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "LoginController", urlPatterns =
 {
@@ -24,6 +26,14 @@ public class LoginController extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("account") != null)
+        {
+            response.sendRedirect("MainController?action=list");
+        } else
+        {
+            request.getRequestDispatcher(Pages.LOGIN).forward(request, response);
+        }
 
     }
 
@@ -37,10 +47,14 @@ public class LoginController extends HttpServlet
         Account account = accountDAO.login(username, password);
         if (account != null)
         {
+            HttpSession session = request.getSession();
+            session.setAttribute("account", account);
+            session.setMaxInactiveInterval(1800);
             request.getRequestDispatcher("MainController?action=list").forward(request, response);
         } else
         {
             request.setAttribute("error", "Wrong username or password");
+            request.getRequestDispatcher(Pages.LOGIN).forward(request, response);
         }
     }
 
